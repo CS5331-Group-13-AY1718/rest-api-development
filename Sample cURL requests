@@ -1,0 +1,77 @@
+==VERY IMPORTANT POINTS==
+
+Each GET/POST request is sent with correct parameters as specified in the assignment API. Wrong request parameters may cause KeyErrors or other errors.
+
+Queries/operations done on non-existent records --but with a valid token-- will return HTTP 200 OK. (e.g. /diary/delete with valid token but non-existent diary id)
+
+Database file is in src/service/database.db, and it contains 2 tables "users" and "diaries".
+Use DB Browser for SQLite to see how the tables look like, I've included 3 users by default in the "users" table.
+The "diaries" table is empty, and requires us to populate it by using sample queries that I've included.
+
+Since this web server is run from Docker, I've taken the liberty to make the database volatile; you can only use DB Browser to look and edit the table layouts, but won't be able to see real-time data inside the tables. To do that, observe the output when you submit curl requests, or enter the URL in firefox to see if the output is correct.
+
+
+
+==INSTRUCTIONS==
+
+Run these POST curl requests in a terminal, or submit your own http GET/POST request with any tool. GET requests can be done by simply opening the respective page in Firefox. (e.g. http://localhost:8080/meta/members)
+
+
+
+==REGISTER A USER==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"username": "testuser", "password": "testpass", "fullname": "test full name", "age": 2009}' http://127.0.0.1:8080/users/register
+
+
+
+==AUTHENTICATE A USER==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"username": "testuser", "password": "testpass"}' http://127.0.0.1:8080/users/authenticate
+
+
+
+==RETURNS WHICHEVER USER REPRESENTATED BY THIS TOKEN==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111"}' http://127.0.0.1:8080/users
+
+
+
+==CREATES A --PUBLIC-- DIARY FOR AN AUTHENTICATED USER==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111", "title": "No One Can See This Post", "public": true, "text": "It is very secret!"}' http://127.0.0.1:8080/diary/create
+
+
+
+==CREATES A --PRIVATE-- DIARY FOR AN AUTHENTICATED USER==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111", "title": "No One Can See This Post", "public": true, "text": "It is very secret!"}' http://127.0.0.1:8080/diary/create
+
+
+
+==LISTS ALL DIARY ENTRIES THAT AN AUTHENTICATED USER HAS==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111"}' http://127.0.0.1:8080/diary
+
+
+
+==SETS AN AUTHENTICATED USER'S DIARY ENTRY TO PRIVATE==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111", "id":1, "public":false}' http://127.0.0.1:8080/diary/permission
+
+
+
+==SETS AN AUTHENTICATED USER'S DIARY ENTRY TO PUBLIC==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111", "id":1, "public":false}' http://127.0.0.1:8080/diary/permission
+
+
+
+==DELETE AN AUTHENTICATED USER'S DIARY ENTRY==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111", "id":1}' http://127.0.0.1:8080/diary/delete
+
+
+
+==EXPIRES AN AUTHENTICATED USER'S TOKEN==
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"token":"111111111111111111111111111111111111"}' http://127.0.0.1:8080/users/expire
