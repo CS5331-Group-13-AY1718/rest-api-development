@@ -175,7 +175,7 @@ def users_register():
         try:
             query = "insert into users(username, password, fullname, age) values ('%s','%s','%s',%s)" % (username,password,fullname,str(age))
             result = query_db(query)
-            return render_template('login.html')
+            return redirect(url_for('users_authenticate'))
             #make_json_response(None, code=201)
         except sqlite3.IntegrityError:
             result = "User already exists!"
