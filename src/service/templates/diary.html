@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<h2> My Diary </h2>
+	<a class="btn btn-success" href="/diary/create"> Create entry</a>
+	<hr>
+
+	<ul class="list-group">
+		{% for entry in diary %}
+			<li class="list-group-item">
+				{{entry.title}}<form action="{{url_for('diary_delete', entryid=entry.id)}}" method="POST">
+					<input type="hidden" name="_method" value="DELETE">
+					<input type="submit" value="Delete" class="btn btn-danger" style="float: right"></form>
+				<br>
+				<small>Written on {{entry.publish_date}}</small>
+				<hr>
+				{{entry.text | safe}}
+			</li>
+			<br>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
