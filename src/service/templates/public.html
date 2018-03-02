@@ -2,12 +2,13 @@
 
 {% block body %}
 	<h2> All Public Diaries </h2>
+	<hr>
 
 	<ul class="list-group">
 		{% for entry in public %}
 			<li class="list-group-item">
-				{{entry.title}}<br>
-				<small> Written by {{entry.author}} on {{entry.publish_date}}</small>
+				<strong>{{entry.title}}</strong><br>
+				<small> Written by {{entry.author}} on {{entry.publish_date}} at {{entry.publish_time}}</small>
 				<hr>
 				{{entry.text | safe}}
 			</li>

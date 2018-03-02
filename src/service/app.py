@@ -6,6 +6,7 @@ from flask import request
 from flask import render_template, flash, redirect, url_for, session, logging
 from flask_cors import CORS
 from datetime import datetime
+import dateutil.parser
 from wtforms import Form, StringField, TextAreaField, IntegerField, PasswordField, SelectField, validators
 from passlib.hash import sha256_crypt
 import json
@@ -79,7 +80,10 @@ def make_diary_dict(row):
     """A diary = [id, title, author, publish_date, public, text]"""
     """Then converts it to a dictionary"""
     """Note that query_db returns a 2d array, or an array of rows"""
-    diaryDict = {"id":row[0],"title":row[1],"author":row[2],"publish_date":row[3],"public":row[4],"text":row[5]}
+    time_from_ISO = dateutil.parser.parse(row[3])
+    publish_date = time_from_ISO.date().strftime('%d/%m/%Y')
+    publish_time = time_from_ISO.time().strftime('%I:%M%p')
+    diaryDict = {"id":row[0],"title":row[1],"author":row[2],"publish_date":publish_date,"publish_time":publish_time,"public":row[4],"text":row[5]}
     return diaryDict
 
 def is_logged_in(f):
@@ -345,6 +349,7 @@ def diary_create():
         return render_template('diary_create.html', form=form)
 
 @app.route("/diary/delete/<string:entryid>", methods=['POST'])
+@is_logged_in
 def diary_delete(entryid):
     if request.method =='POST':
         token = session['token']
@@ -363,18 +368,26 @@ def diary_delete(entryid):
             app.logger.info('Deleting diary id = %d from author = %s', id, username)
             query = "delete from diaries where author='%s' and id='%d'" % (username, id)
             result = query_db(query)
-            return make_json_response(None)
+            return redirect(url_for('diary_get'))
+            #return make_json_response(None)
 
 
-@app.route("/diary/permission", methods=['POST'])
-def diary_permission():
+@app.route("/diary/permission/<string:entryid>/<string:entrypublic>", methods=['POST'])
+@is_logged_in
+def diary_permission(entryid, entrypublic):
     if request.method =='POST':
-        paramsJSON = request.get_json()
-        token = paramsJSON['token']
-        id = paramsJSON['id']
-        public = int_from_boolean(paramsJSON['public'])
+        token = session['token']
+        #paramsJSON = request.get_json()
+        #token = paramsJSON['token']
+        #id = paramsJSON['id']
+        #public = int_from_boolean(paramsJSON['public'])
 
         """Get user from token first"""
+        id = int(entryid)
+        if entrypublic == "1":
+            public = 0
+        else:
+            public = 1
         user = user_from_token(token)
         """If no such user with this token exists, else"""
         if user == []:
@@ -383,7 +396,8 @@ def diary_permission():
             username = user[0]
             query = "update diaries SET 'public'='%d' where id='%d'" % (public,id)
             result = query_db(query)        
-            return make_json_response(None)
+            return redirect(url_for('diary_get'))
+            #make_json_response(None)
 
 
 if __name__ == '__main__':

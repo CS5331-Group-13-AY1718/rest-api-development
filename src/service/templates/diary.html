@@ -1,20 +1,33 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	<h2> My Diary </h2>
-	<a class="btn btn-success" href="/diary/create"> Create entry</a>
-	<hr>
-
+	<h2> My Diary <a class="btn btn-success" href="/diary/create" style="float: right">New Entry</a>
+	<hr></h2>
 	<ul class="list-group">
 		{% for entry in diary %}
 			<li class="list-group-item">
-				{{entry.title}}<form action="{{url_for('diary_delete', entryid=entry.id)}}" method="POST">
-					<input type="hidden" name="_method" value="DELETE">
-					<input type="submit" value="Delete" class="btn btn-danger" style="float: right"></form>
+				<strong>{{entry.title}}</strong>
 				<br>
-				<small>Written on {{entry.publish_date}}</small>
+				{% if entry.public %}
+					<small>[Public] Written on {{entry.publish_date}} at {{entry.publish_time}}</small>
+				{% else %}
+					<small>[Private] Written on {{entry.publish_date}} at {{entry.publish_time}}</small>
+				{% endif %}
 				<hr>
 				{{entry.text | safe}}
+				<hr>
+				<span><form action="{{url_for('diary_delete', entryid=entry.id)}}" method="POST">
+					<input type="hidden" name="_method" value="DELETE">
+					<input type="submit" value="Delete" class="btn btn-danger" style="float: right"></form></span>
+				{% if entry.public %}
+					<span><form action="{{url_for('diary_permission', entryid=entry.id, entrypublic=entry.public)}}" method="POST">
+					<input type="hidden" name="_method" value="PERMISSION">
+					<input type="submit" value="Make Private" class="btn" style="float: right"></form></span>
+				{% else %}
+					<span><form action="{{url_for('diary_permission', entrypublic=entry.public, entryid=entry.id)}}" method="POST">
+					<input type="hidden" name="_method" value="PERMISSION">
+					<input type="submit" value="Make Public" class="btn" style="float: right"></form></span>
+				{% endif %}
 			</li>
 			<br>
 		{% endfor %}
