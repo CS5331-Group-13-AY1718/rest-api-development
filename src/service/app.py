@@ -264,7 +264,11 @@ def diary_create():
             generatedDT = get_current_datetime()
             query = "insert into diaries ('title', 'author', 'publish_date', 'public', 'text') values ('%s','%s','%s','%d','%s')" % (title,username,generatedDT,int_from_boolean(public),text)
             result = query_db(query)
-            return make_json_response(data=2, code=201)
+
+            """Retrieve last inserted id"""
+            query = "select seq from sqlite_sequence where name='diaries'" 
+            result = query_db(query)
+            return make_json_response(data={"id":result[0][0]}, code=201)
 
 
 @app.route("/diary/delete", methods=['POST'])
