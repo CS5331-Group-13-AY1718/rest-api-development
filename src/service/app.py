@@ -188,7 +188,7 @@ def users_expire():
         else:
             """De-authenticates user"""
             """Query to insert blank token to users table token column"""
-            query = "update users SET token='%s' where token='%s'" % ("", token)
+            query = "update users SET token=%s where token='%s'" % ("NULL", token)
             result = query_db(query)
             """An update query does not return a result in query_db()"""
             return make_json_response(data=None)
