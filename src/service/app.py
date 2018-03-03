@@ -49,7 +49,10 @@ def user_from_token(token):
     query = "select * from users where token='%s'" % token
     user = query_db(query)
     """Since only one user should match the query at any time, select it"""
-    return user[0]
+    if user != []:
+	return user[0]
+    else:
+        return user
 
 def int_from_boolean(truth):
     """UTILITY METHOD"""
