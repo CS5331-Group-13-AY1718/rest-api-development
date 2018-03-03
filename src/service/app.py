@@ -169,7 +169,7 @@ def users_authenticate():
             query = "update users SET token='%s' where username='%s'and password='%s'" % (str(generatedToken), username,password)
             result = query_db(query)
             """An update query does not return a result in query_db()"""
-            return make_json_response(str(generatedToken))
+            return make_json_response(data={"token":str(generatedToken)})
 
 
 @app.route("/users/expire", methods=['POST'])
@@ -214,7 +214,7 @@ def users_get():
             return make_json_response(data="Invalid authentication token", status=False)
 
         else:
-            return make_json_response(None, username=result[0], fullname=result[2], age=result[3])
+            return make_json_response(data={"username":result[0], "fullname":result[2], "age":result[3]})
 
 
 
