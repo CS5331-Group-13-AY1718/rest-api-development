@@ -192,15 +192,8 @@ def users_expire():
             return make_json_response(data=None)
 
 
-@app.route("/users", methods=['GET', 'POST'])
+@app.route("/users", methods=['POST'])
 def users_get():
-    if request.method =='GET':
-        """Returns all current usernames in DB, ONLY FOR DEBUGGING"""
-        users = []
-        for user in query_db('select * from users'):
-            users.append(user)
-        return make_json_response(users)
-
     if request.method =='POST':
         paramsJSON = request.get_json()
         token = paramsJSON['token']
