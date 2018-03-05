@@ -117,12 +117,16 @@ Answer: Make it https-compliant, have more parameters like nonces or timeouts fo
 
 #### Question 4: Are there any additional features you would like to highlight?
 
-Answer: None.
+Answer:
+Some accounts have been created for testing purposes.
+Username: user1 Password:pass1
+Username: user2 Password:pass2
+Username: user3 Password:pass3
 
 #### Question 5: Is your web application vulnerable? If yes, how and why? If not, what measures did you take to secure it?
 
 Answer: 
-Yes. Certain malformed requests may cause errors/exceptions in the server that will make it return a HTTP 500 error. Some errors were caught, but not all of them. 
+Yes. To facilitate user access via tokens, a user's token is stored within the webpage as a hidden field. An attacker may be able to output the value of the field by launching an XSS attack, outputting it via an alert message.
 
 No steps were taken to prevent SQL injection vulnerabilities either. 
 

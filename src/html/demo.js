@@ -1,4 +1,4 @@
-var API_ENDPOINT = "http://192.168.99.100:8080"
+var API_ENDPOINT = "http://localhost:8080"
 
 // From https://code-maven.com/ajax-request-for-json-data
 

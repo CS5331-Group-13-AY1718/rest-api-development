@@ -150,7 +150,7 @@ def users_authenticate():
         password =  paramsJSON['password']
 
         """Check if such a user exists first"""
-        query = "select * from users where username='%s'and password='%s'" % (username,password)
+        query = "select * from users where username='%s'" % (username)
         result = query_db(query)
 
         if result == []:
