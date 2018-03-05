@@ -95,7 +95,17 @@ const isValidElement = element => {
 const formToJSON = elements => [].reduce.call(elements, (data, element) => {
   
     if (isValidElement(element)){
-        data[element.name] = element.value;
+        if (element.name == "public"){
+            if (element.checked){
+                data[element.name] = true;
+            }
+            else {
+                data[element.name] = false;
+            }
+        }
+        else {
+            data[element.name] = element.value;
+        }
     }
     return data;
 
@@ -111,13 +121,15 @@ const handleLoginFormSubmit = event => {
     ajax_post(url, jsondata, function(data) {
         var result = data.result
         if (data.status) {
-            var output = "<input type=\"submit\" value=\"Logout\" onclick=\"userLogOut()\">";
+            var output = "<input type=\"submit\" value=\"Logout\" onclick=\"userLogOut()\"/>";
             document.getElementById("login-feedback").innerHTML = "Logged in as " + loggeduser + ". " + output;
             document.getElementById("token").value = data.result.token;
+            document.getElementById("create-token").value = data.result.token;
         }
         else {
             document.getElementById("login-feedback").innerHTML = "Login failed";
             document.getElementById("token").value = "";
+            document.getElementById("create-token").value = "";
         }
     });
 
@@ -180,13 +192,10 @@ const retrieveDiarySubmit = event => {
 const deleteDiarySubmit = event => {
     url = API_ENDPOINT + "/diary/delete";
     event.preventDefault();
-    document.getElementById("diary-feedback").innerHTML = "test";
-    saved_data = deletediary.elements;
     const data = formToJSON(deletediary.elements);
     jsondata = JSON.stringify(data, null, "  ");
 
     ajax_post(url, jsondata, function(data) {
-        var result = data.result
         if (data.status) {
             document.getElementById("diary-feedback").innerHTML = "Entry deleted";
         }
@@ -196,8 +205,8 @@ const deleteDiarySubmit = event => {
     });
 };
 
-const loginform = document.getElementById('login-form');
-const registerform = document.getElementById('register-form');
+const loginform = document.getElementById('login_form');
+const registerform = document.getElementById('register_form');
 const retrievediary = document.getElementById('retrieve-diary');
 const deletediary = document.getElementById('delete-diary');
 
@@ -207,7 +216,29 @@ retrievediary.addEventListener('submit', retrieveDiarySubmit);
 deletediary.addEventListener('submit', deleteDiarySubmit);
 
 function userLogOut(){
-    document.getElementById("token").value = "";
-    document.getElementById("my-diaries").innerHTML = "";
-    document.getElementById("login-feedback").innerHTML = "";
+    location.reload();
+    //document.getElementById("token").value = "";
+    
+    //document.getElementById("my-diaries").innerHTML = "";
+    //document.getElementById("login-feedback").innerHTML = "Logged out!";
+}
+
+function createDiary(){
+    const creatediary = document.getElementById('create_diary');
+
+    url = API_ENDPOINT + "/diary/create";
+    event.preventDefault();
+    const data = formToJSON(creatediary.elements);
+    jsondata = JSON.stringify(data, null, "  ");
+
+    ajax_post(url, jsondata, function(data) {
+        if (data.status) {
+            document.getElementById("create-feedback").innerHTML = "Entry created";
+        }
+        else {
+            document.getElementById("create-feedback").innerHTML = "Invalid authentication";
+        }
+    });
+    
+    creatediary.reset();
 }

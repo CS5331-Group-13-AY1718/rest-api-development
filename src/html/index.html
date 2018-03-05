@@ -7,8 +7,8 @@
         <h1>Welcome to Secret Diary</h1>
         <div class="sidebar-right" style="float:right;">
             <div>
-                <form method="post" id="login-form">
-                    <fieldset class="forms">
+                <form method="post" id="login_form">
+                    <fieldset class="login_form">
                         <legend>Login</legend>
                         <p><label class="field">Username: </label><input type="text" name="username" class="textbox100"/></p>
                         <p><label class="field">Password: </label><input type="password" name="password" class="textbox100"/></p>
@@ -19,8 +19,8 @@
             </div>
             <br>
             <div>
-                <form method="post" id="register-form">
-                    <fieldset class="forms">
+                <form method="post" id="register_form">
+                    <fieldset class="register_form">
                         <legend>Register</legend>
                         <p><label class="field">Username: </label><input type="text" name="username" class="textbox100"/></p>
                         <p><label class="field">Password: </label><input type="password" name="password" class="textbox100"/></p>
@@ -51,6 +51,19 @@
             </fieldset>
         </div>
         <div id="diary-feedback"></div>
+        <br>
+        <div>
+            <form method="post" id="create_diary">
+                <fieldset class="diaries">
+                    <legend>New Diary Entry</legend>
+                    <p><label class="field">Title: </label><input type="text" name="title" class="textbox100"/>&nbsp;<input type="checkbox" name="public" id="public"/><label for="public">Make Public?</label></p>
+                    <p><label class="field">Text: </label><textarea rows="5" cols="80" name="text"></textarea>
+                    <input type="hidden" name="token" id="create-token"/>
+                    <p><input type="submit" value="Create Entry" onclick="createDiary()"></p>
+                </fieldset>
+            </form>
+            <div id="create-feedback"></div>
+        </div>
         <script src="./demo.js"></script>
     </body>
 </html>

@@ -2,7 +2,11 @@ li {
 	margin: 20px 0;
 }
 
-fieldset.forms {
+fieldset.login_form {
+	width: 300px;
+}
+
+fieldset.register_form {
 	width: 300px;
 }
 
