@@ -6,6 +6,7 @@ RUN pip install -U pip
 RUN pip install -U flask
 RUN pip install -U flask-cors
 RUN pip install -U pytz
+RUN pip install -U passlib
 RUN echo "ServerName localhost  " >> /etc/apache2/apache2.conf
 RUN echo "$user     hard    nproc       20" >> /etc/security/limits.conf
 ADD ./src/service /service

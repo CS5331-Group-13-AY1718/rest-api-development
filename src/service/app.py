@@ -5,6 +5,7 @@ from flask import g
 from flask import request
 from flask_cors import CORS
 from datetime import datetime
+from passlib.hash import sha256_crypt
 import json
 import os
 import sqlite3
@@ -130,7 +131,7 @@ def users_register():
         """Registers users"""
         paramsJSON = request.get_json()
         username = paramsJSON['username']
-        password =  paramsJSON['password']
+        password =  sha256_crypt.encrypt(paramsJSON['password'])
         fullname = paramsJSON['fullname']
         age = paramsJSON['age']
         try:
@@ -150,20 +151,23 @@ def users_authenticate():
         password =  paramsJSON['password']
 
         """Check if such a user exists first"""
-        query = "select * from users where username='%s'and password='%s'" % (username,password)
+        query = "select * from users where username='%s'" % (username)
         result = query_db(query)
 
         if result == []:
             return make_json_response(data=None, status=False)
 
         else:
-            """Authenticates user"""
-            """Query to insert token to users table token column"""
-            generatedToken = uuid.uuid4()
-            query = "update users SET token='%s' where username='%s'and password='%s'" % (str(generatedToken), username,password)
-            result = query_db(query)
-            """An update query does not return a result in query_db()"""
-            return make_json_response(data={"token":str(generatedToken)})
+            if not sha256_crypt.verify(password, result[0][1]):
+                return make_json_response(data=None, status=False)
+            else:
+                """Authenticates user"""
+                """Query to insert token to users table token column"""
+                generatedToken = uuid.uuid4()
+                query = "update users SET token='%s' where username='%s'and password='%s'" % (str(generatedToken), username,password)
+                result = query_db(query)
+                """An update query does not return a result in query_db()"""
+                return make_json_response(data={"token":str(generatedToken)})
 
 
 @app.route("/users/expire", methods=['POST'])

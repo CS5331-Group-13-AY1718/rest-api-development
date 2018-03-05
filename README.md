@@ -122,7 +122,7 @@ Answer: None.
 #### Question 5: Is your web application vulnerable? If yes, how and why? If not, what measures did you take to secure it?
 
 Answer: 
-Yes. Certain malformed requests may cause errors/exceptions in the server that will make it return a HTTP 500 error. Some errors were caught, but not all of them. 
+Yes. To facilitate user access via tokens, a user's token is stored within the webpage as a hidden field. An attacker may be able to output the value of the field by launching an XSS attack, outputting it via an alert message.
 
 No steps were taken to prevent SQL injection vulnerabilities either. 
 
