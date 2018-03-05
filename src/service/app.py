@@ -84,7 +84,7 @@ def make_diary_dict(row):
 # Remember to update this list
 ENDPOINT_LIST = ['/', '/meta/heartbeat', '/meta/members', '/users/register', '/users/authenticate', '/users/expire', '/users', '/diary', '/diary/create', '/diary/delete', '/diary/permission']
 
-def make_json_response(data, status=True, code=200, username=None, fullname=None, age=None):
+def make_json_response(data, status=True, code=200):
     """Utility function to create the JSON responses."""
 
     to_serialize = {}
@@ -92,12 +92,6 @@ def make_json_response(data, status=True, code=200, username=None, fullname=None
         to_serialize['status'] = True
         if data is not None:
             to_serialize['result'] = data
-        if username is not None:
-            to_serialize['username'] = username
-        if fullname is not None:
-            to_serialize['fullname'] = fullname
-        if age is not None:
-            to_serialize['age'] = age
     else:
         to_serialize['status'] = False
         if data is not None:
