@@ -49,7 +49,10 @@ def user_from_token(token):
     query = "select * from users where token='%s'" % token
     user = query_db(query)
     """Since only one user should match the query at any time, select it"""
-    return user[0]
+    if user != []:
+	return user[0]
+    else:
+        return user
 
 def int_from_boolean(truth):
     """UTILITY METHOD"""
@@ -81,7 +84,7 @@ def make_diary_dict(row):
 # Remember to update this list
 ENDPOINT_LIST = ['/', '/meta/heartbeat', '/meta/members', '/users/register', '/users/authenticate', '/users/expire', '/users', '/diary', '/diary/create', '/diary/delete', '/diary/permission']
 
-def make_json_response(data, status=True, code=200, username=None, fullname=None, age=None):
+def make_json_response(data, status=True, code=200):
     """Utility function to create the JSON responses."""
 
     to_serialize = {}
@@ -89,12 +92,6 @@ def make_json_response(data, status=True, code=200, username=None, fullname=None
         to_serialize['status'] = True
         if data is not None:
             to_serialize['result'] = data
-        if username is not None:
-            to_serialize['username'] = username
-        if fullname is not None:
-            to_serialize['fullname'] = fullname
-        if age is not None:
-            to_serialize['age'] = age
     else:
         to_serialize['status'] = False
         if data is not None:
@@ -166,7 +163,7 @@ def users_authenticate():
             query = "update users SET token='%s' where username='%s'and password='%s'" % (str(generatedToken), username,password)
             result = query_db(query)
             """An update query does not return a result in query_db()"""
-            return make_json_response(str(generatedToken))
+            return make_json_response(data={"token":str(generatedToken)})
 
 
 @app.route("/users/expire", methods=['POST'])
@@ -185,7 +182,7 @@ def users_expire():
         else:
             """De-authenticates user"""
             """Query to insert blank token to users table token column"""
-            query = "update users SET token='%s' where token='%s'" % ("", token)
+            query = "update users SET token=%s where token='%s'" % ("NULL", token)
             result = query_db(query)
             """An update query does not return a result in query_db()"""
             return make_json_response(data=None)
@@ -211,7 +208,7 @@ def users_get():
             return make_json_response(data="Invalid authentication token", status=False)
 
         else:
-            return make_json_response(None, username=result[0], fullname=result[2], age=result[3])
+            return make_json_response(data={"username":result[0], "fullname":result[2], "age":result[3]})
 
 
 
@@ -261,7 +258,11 @@ def diary_create():
             generatedDT = get_current_datetime()
             query = "insert into diaries ('title', 'author', 'publish_date', 'public', 'text') values ('%s','%s','%s','%d','%s')" % (title,username,generatedDT,int_from_boolean(public),text)
             result = query_db(query)
-            return make_json_response(data=2, code=201)
+
+            """Retrieve last inserted id"""
+            query = "select seq from sqlite_sequence where name='diaries'" 
+            result = query_db(query)
+            return make_json_response(data={"id":result[0][0]}, code=201)
 
 
 @app.route("/diary/delete", methods=['POST'])

@@ -96,48 +96,56 @@ Please fill out this section with details relevant to your team.
 
 ### Team Members
 
-1. Member 1 Name
-2. Member 2 Name
-3. Member 3 Name
-4. Member 4 Name
+1. Eldric Lim
+2. Joshua Che
+3. Chan Jian Hui
+4. Derek Kok
 
 ### Short Answer Questions
 
 #### Question 1: Briefly describe the web technology stack used in your implementation.
 
-Answer: Please replace this sentence with your answer.
+Answer: Python Flask for the web application, sqlite3 for the backend-database. We chose sqlite3 as it is light-weight and easy to use with Python Flask.
 
 #### Question 2: Are there any security considerations your team thought about?
 
-Answer: Please replace this sentence with your answer.
+Answer: Yes, we initially made a user's token "" (empty string) when expired. This allowed requests to be authenticated by simply passing an empty string in a http request. We proceeded to change it to NULL instead.
 
 #### Question 3: Are there any improvements you would make to the API specification to improve the security of the web application?
 
-Answer: Please replace this sentence with your answer.
+Answer: Make it https-compliant, have more parameters like nonces or timeouts for things like requests or tokens, etc.
 
 #### Question 4: Are there any additional features you would like to highlight?
 
-Answer: Please replace this sentence with your answer.
+Answer: None.
 
 #### Question 5: Is your web application vulnerable? If yes, how and why? If not, what measures did you take to secure it?
 
-Answer: Please replace this sentence with your answer.
+Answer: 
+Yes. Certain malformed requests may cause errors/exceptions in the server that will make it return a HTTP 500 error. Some errors were caught, but not all of them. 
+
+No steps were taken to prevent SQL injection vulnerabilities either. 
+
+As stated in question 2, our application initially allowed blank tokens, which could authenticate a request when a blank token is used, but we fixed this by using NULL instead.
 
 #### Feedback: Is there any other feedback you would like to give?
 
-Answer: Please replace this sentence with your answer.
+Answer: None.
 
 ### Declaration
 
 #### Please declare your individual contributions to the assignment:
 
-1. Member 1 Name
-    - Integrated feature x into component y
-    - Implemented z
-2. Member 2 Name
-    - Wrote the front-end code
-3. Member 3 Name
-    - Designed the database schema
-4. Member 4 Name
-    - Implemented x
+1. Eldric Lim
+    - API
+    - Front-end
+2. Joshua Che
+    - API
+    - Front-end
+3. Chan Jian Hui
+    - API
+    - Front-end
+4. Derek Kok
+    - API
+    - Front-end
 
