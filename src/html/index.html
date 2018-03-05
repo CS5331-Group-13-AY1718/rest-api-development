@@ -1,14 +1,49 @@
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="index.css">
+        <script src="./jquery-3.3.1.min.js"></script> 
+        <script> 
+            $(function(){
+              $("#nav-topbar").load("navbar.html"); 
+            });
+        </script>
     </head>
+    <div id="nav-topbar"></div>
     <body>
         <h1>Welcome to Secret Diary</h1>
-        <div id="demo_heartbeat">
+        <div class="sidebar-right" style="float:right;">
+            <div>
+                <form method="post" id="login-form">
+                    <fieldset>
+                        <legend>Login</legend>
+                        <p><label class="field">Username: </label><input type="text" name="username" class="textbox100"/></p>
+                        <p><label class="field">Password: </label><input type="password" name="password" class="textbox100"/></p>
+                        <p><input type="submit" value="Login"></p>
+                    </fieldset>
+                </form>
+                <div id="login-feedback"></div>
+            </div>
+            <br>
+            <div>
+                <form method="post" id="register-form">
+                    <fieldset>
+                        <legend>Register</legend>
+                        <p><label class="field">Username: </label><input type="text" name="username" class="textbox100"/></p>
+                        <p><label class="field">Password: </label><input type="password" name="password" class="textbox100"/></p>
+                        <p><label class="field">Full name: </label><input type="text" name="fullname" class="textbox100"/></p>
+                        <p><label class="field">Age: </label><input type="text" name="age" class="textbox100"/></p>
+                        <p><input type="submit" value="Register"></p>
+                </form>
+                <div id="register-feedback"></div>
+            </div>
+            <br>
         </div>
-        <div id="demo_members">
-        </div>
-        <div id="demo_diary">
-        </div>
+        <div id="demo_diary"></div>
+
+        <!--<div id="demo_heartbeat"></div>
+        <div id="demo_members"></div>-->
+        <div id="view"></div>
         <script src="./demo.js"></script>
     </body>
 </html>

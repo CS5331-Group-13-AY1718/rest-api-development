@@ -1,0 +1,29 @@
+fieldset {
+	width: 300px;
+}
+
+legend {
+	font-size: 20px;
+}
+
+label.field {
+	text-align: left;
+	width: 80px;
+	float: left;
+	font-weight: bold;
+	padding-right: 10px;
+}
+
+input.textbox100 {
+	width: 200px;
+	float: left;
+}
+
+fieldset p {
+	clear: both;
+	padding: 5px;
+}
+
+public-diaries {
+	padding-right: 100px;
+}
