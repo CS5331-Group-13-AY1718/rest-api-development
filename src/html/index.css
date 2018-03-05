@@ -1,5 +1,13 @@
-fieldset {
+li {
+	margin: 20px 0;
+}
+
+fieldset.forms {
 	width: 300px;
+}
+
+fieldset.diaries {
+	width: 700px;
 }
 
 legend {
