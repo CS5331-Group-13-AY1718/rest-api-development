@@ -5,7 +5,6 @@ from flask import g
 from flask import request
 from flask_cors import CORS
 from datetime import datetime
-from passlib.hash import sha256_crypt
 import json
 import os
 import sqlite3
@@ -131,7 +130,7 @@ def users_register():
         """Registers users"""
         paramsJSON = request.get_json()
         username = paramsJSON['username']
-        password =  sha256_crypt.encrypt(paramsJSON['password'])
+        password =  paramsJSON['password']
         fullname = paramsJSON['fullname']
         age = paramsJSON['age']
         try:
@@ -158,16 +157,13 @@ def users_authenticate():
             return make_json_response(data=None, status=False)
 
         else:
-            if not sha256_crypt.verify(password, result[0][1]):
-                return make_json_response(data=None, status=False)
-            else:
-                """Authenticates user"""
-                """Query to insert token to users table token column"""
-                generatedToken = uuid.uuid4()
-                query = "update users SET token='%s' where username='%s'and password='%s'" % (str(generatedToken), username,password)
-                result = query_db(query)
-                """An update query does not return a result in query_db()"""
-                return make_json_response(data={"token":str(generatedToken)})
+            """Authenticates user"""
+            """Query to insert token to users table token column"""
+            generatedToken = uuid.uuid4()
+            query = "update users SET token='%s' where username='%s'and password='%s'" % (str(generatedToken), username,password)
+            result = query_db(query)
+            """An update query does not return a result in query_db()"""
+            return make_json_response(data={"token":str(generatedToken)})
 
 
 @app.route("/users/expire", methods=['POST'])
