@@ -117,7 +117,7 @@ Answer: Make it https-compliant, have more parameters like nonces or timeouts fo
 
 #### Question 4: Are there any additional features you would like to highlight?
 
-Answer: None.
+Answer: Our front-end code is incomplete, features such as deletion and changing of permission on diary entries are not implemented.
 
 #### Question 5: Is your web application vulnerable? If yes, how and why? If not, what measures did you take to secure it?
 
